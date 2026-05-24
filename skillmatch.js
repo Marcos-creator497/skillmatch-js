@@ -37,3 +37,38 @@ const vagas = [
     modalidade: "Presencial"
   }
 ];
+// ============================================
+// RF03, RF04, RF05 - CALCULAR COMPATIBILIDADE,
+// CLASSIFICAR E LISTAR HABILIDADES FALTANTES
+// ============================================
+function calcularCompatibilidade(candidato, vaga) {
+  const habilidadesEncontradas = vaga.requisitos.filter(req =>
+    candidato.habilidades.includes(req)
+  );
+
+  const habilidadesFaltantes = vaga.requisitos.filter(req =>
+    !candidato.habilidades.includes(req)
+  );
+
+  const percentual = Math.round(
+    (habilidadesEncontradas.length / vaga.requisitos.length) * 100
+  );
+
+  let classificacao;
+  if (percentual >= 80) {
+    classificacao = "Alta compatibilidade";
+  } else if (percentual >= 50) {
+    classificacao = "Média compatibilidade";
+  } else {
+    classificacao = "Baixa compatibilidade";
+  }
+
+  return {
+    empresa: vaga.empresa,
+    cargo: vaga.cargo,
+    percentual,
+    habilidadesEncontradas,
+    habilidadesFaltantes,
+    classificacao
+  };
+}
