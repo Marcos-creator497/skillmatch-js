@@ -143,3 +143,52 @@ async function iniciarSistema() {
   console.log("Vagas carregadas com sucesso!");
   return vagasCarregadas;
 }
+// ============================================
+// RF06, RF07, RF08 - FUNÇÃO PRINCIPAL
+// Usa map, find, reduce (3 métodos de array)
+// ============================================
+async function rodarSkillMatch() {
+  const vagasCarregadas = await iniciarSistema();
+
+  // RF08 - map: gera lista de resultados
+  const resultados = vagasCarregadas.map(vaga =>
+    calcularCompatibilidade(candidato, vaga)
+  );
+
+  // Exibe resultado de cada vaga
+  resultados.forEach(resultado => {
+    contarAnalise();
+    console.log("==========================================");
+    console.log(`Empresa: ${resultado.empresa}`);
+    console.log(`Cargo: ${resultado.cargo}`);
+    console.log(`Compatibilidade: ${resultado.percentual}%`);
+    console.log(`Habilidades encontradas: ${resultado.habilidadesEncontradas.join(", ")}`);
+    console.log(`Habilidades faltantes: ${resultado.habilidadesFaltantes.join(", ") || "Nenhuma"}`);
+    console.log(`Classificação: ${resultado.classificacao}`);
+  });
+
+  // RF06 - reduce: encontra vaga com maior compatibilidade
+  const melhorVaga = resultados.reduce((melhor, atual) =>
+    atual.percentual > melhor.percentual ? atual : melhor
+  );
+
+  console.log("==========================================");
+  console.log("Vaga mais compatível:");
+  console.log(`${melhorVaga.empresa} - ${melhorVaga.cargo}`);
+  console.log(`Compatibilidade: ${melhorVaga.percentual}%`);
+
+  // RF07 - recomendação de estudo
+  const todasFaltantes = resultados.flatMap(r => r.habilidadesFaltantes);
+  const unicasFaltantes = [...new Set(todasFaltantes)];
+
+  if (unicasFaltantes.length > 0) {
+    console.log("==========================================");
+    console.log(`Recomendação de estudo: Priorize estudar ${unicasFaltantes.join(", ")}`);
+  }
+
+  // RF12 - callback
+  finalizarAnalise(candidato.nome, exibirMensagemFinal);
+}
+
+// Inicia o sistema!
+rodarSkillMatch();
