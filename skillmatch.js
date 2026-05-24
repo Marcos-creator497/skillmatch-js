@@ -101,3 +101,45 @@ class VagaFrontEnd extends Vaga {
     return `Nível da vaga: ${this.nivel}`;
   }
 }
+// ============================================
+// RF12 - CALLBACK
+// ============================================
+function finalizarAnalise(nomeCandidato, callback) {
+  console.log("Análise finalizada.");
+  callback(nomeCandidato);
+}
+
+function exibirMensagemFinal(nome) {
+  console.log(`${nome}, revise suas habilidades faltantes e atualize seu plano de estudos.`);
+}
+
+// ============================================
+// RF13 - CLOSURE
+// ============================================
+function criarContadorDeAnalises() {
+  let total = 0;
+  return function () {
+    total++;
+    return total;
+  };
+}
+
+const contarAnalise = criarContadorDeAnalises();
+
+// ============================================
+// RF14 - PROMISE E ASYNC/AWAIT
+// ============================================
+function buscarVagasSimuladas() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(vagas);
+    }, 1000);
+  });
+}
+
+async function iniciarSistema() {
+  console.log("Carregando vagas...");
+  const vagasCarregadas = await buscarVagasSimuladas();
+  console.log("Vagas carregadas com sucesso!");
+  return vagasCarregadas;
+}
